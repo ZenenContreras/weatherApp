@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Card } from "./ui/card"
 
 function Weather () {
     const [isOpen, setIsOpen] = useState(false)
