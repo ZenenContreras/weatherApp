@@ -1,6 +1,6 @@
-import NavBar from './components/Navbar'
-import SearchBar from './components/SearchBar'
-import Weather from './components/Weather'
+import NavBar from './components/NavBar.jsx'
+import SearchBar from './components/SearchBar.jsx'
+import Weather from './components/Weather.jsx'
 
 function App() {
 
