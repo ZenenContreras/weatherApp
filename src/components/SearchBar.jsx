@@ -51,7 +51,7 @@ function SearchBar ({ onCitySelect }){
 
 
     return (
-        <div className=" font-dm pt-20 flex flex-col items-center mx-4">
+        <div className=" min-w-22 font-dm pt-20 flex flex-col items-center mx-4">
             <h1 className="font-bold text-white text-5xl text-center">How’s the sky looking today?</h1>
             <div className="relative">
                 <div className=" text-white py-10 w-full flex flex-col lg:flex-row items-center justify-center gap-4">
@@ -60,7 +60,7 @@ function SearchBar ({ onCitySelect }){
                             type="text"
                             placeholder="Search for a place..."
                             onChange={handleInputChange}
-                            onFocus={()=> setIsOpen(true)}
+                            onFocus={()=> setIsOpen(!isOpen)}
                         />
                         <button className="bg-[#2B1B9C] h-12 rounded-xl w-full lg:w-26">
                             Search
@@ -76,7 +76,7 @@ function SearchBar ({ onCitySelect }){
                                 <button
                                     key={index}
                                     className="p-4 rounded-lg w-full text-left hover:bg-[#3C3B5E] transition-colors"
-                                    onClick={()=> handleCitySelect(city)}
+                                    onFocus={()=> handleCitySelect(city)}
                                 >
                                     {city.name}, {city.country}
                                     {city.admin1 && `, ${city.admin1}`}
