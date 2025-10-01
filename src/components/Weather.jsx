@@ -82,32 +82,46 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
 
         const hourly = weatherData.hourly
 
-        // Si no hay día seleccionado, mostramos las próximas 8 horas (comportamiento por defecto)
+        const now = new Date() // Fecha y hora actual
+
+        // Si NO hay día seleccionado → Muestra próximas 8 horas desde AHORA
         if (!dayName) {
-            return hourly.time.slice(0, 8).map((time, index) => ({
-                hour: formatHour(time),
-                weather: handleWeatherChange(Math.round(hourly.temperature_2m[index])),
-                icon: getWeatherIcon(hourly.weather_code[index])
-            }))
+            const filteredHours = []
+            
+            for (let i = 0; i < hourly.time.length && filteredHours.length < 8; i++) {
+                const hourTime = new Date(hourly.time[i])
+                
+                // Solo agregamos horas que sean >= a la hora actual
+                if (hourTime >= now) {
+                    filteredHours.push({
+                        hour: formatHour(hourly.time[i]),
+                        weather: handleWeatherChange(Math.round(hourly.temperature_2m[i])),
+                        icon: getWeatherIcon(hourly.weather_code[i])
+                    })
+                }
+            }
+            
+            return filteredHours
         }
 
-        // Filtrar horas que corresponden al día seleccionado
+        // Si HAY día seleccionado → Filtra horas de ese día desde la hora actual
         const filteredHours = []
         
         for (let i = 0; i < hourly.time.length; i++) {
             const timeString = hourly.time[i]
+            const hourTime = new Date(timeString)
             const fullDayName = getFullDayName(timeString)
             
-            // Si el día coincide, agregamos la hora
-            if (fullDayName === dayName) {
+            // ¿Este tiempo corresponde al día seleccionado Y es >= hora actual?
+            if (fullDayName === dayName && hourTime >= now) {
                 filteredHours.push({
                     hour: formatHour(timeString),
                     weather: handleWeatherChange(Math.round(hourly.temperature_2m[i])),
                     icon: getWeatherIcon(hourly.weather_code[i])
                 })
             }
-            
-            // Limitamos a 24 horas (un día completo)
+                
+            // Limitamos a 8 horas
             if (filteredHours.length >= 8) break
         }
 
