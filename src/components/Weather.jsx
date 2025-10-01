@@ -45,9 +45,9 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
             71: "/icon-snow.webp",  // Nieve ligera
             73: "/icon-snow.webp",  // Nieve moderada
             75: "/icon-snow.webp",  // Nieve fuerte
-            80: "/icon-storm.webpp", // Nieve fuerte
-            95: "/icon-storm.webpp",  // Tormenta
-            96: "/icon-storm.webpp" // Tormenta
+            80: "/icon-storm.webp", // Nieve fuerte
+            95: "/icon-storm.webp",  // Tormenta
+            96: "/icon-storm.webp" // Tormenta
 
         }
         return icons[weatherCode] || "/icon-sunny.webp"
