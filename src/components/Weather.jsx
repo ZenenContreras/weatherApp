@@ -116,7 +116,7 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-white pb-12 px-4 flex-1">
             <div className="flex flex-col lg:col-span-2 gap-5 h-full flex-1">
                 {/* Tarjeta principal */}
-                <div className="bg-[url('/bg-today-small.svg')] min-h-[200px] md:min-h-[250px] lg:min-h-[300px] md:bg-[url('/bg-today-large.svg')] lg:bg-[url('./bg-today-large.svg')] bg-cover bg-center bg-no-repeat flex items-center justify-between font-bold p-4 md:p-6 lg:p-8 rounded-2xl">
+                <div className="bg-[url('/bg-today-small.svg')] min-h-[200px] md:min-h-[250px] lg:min-h-[300px] md:bg-[url('/bg-today-large.svg')] lg:bg-[url('/bg-today-large.svg')] bg-cover bg-center bg-no-repeat flex items-center justify-between font-bold p-4 md:p-6 lg:p-8 rounded-2xl">
                     <div className="flex flex-col gap-2">
                         <span className="text-sm md:text-base lg:text-lg">
                             {location.name}, {location.country}
