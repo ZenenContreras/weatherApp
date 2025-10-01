@@ -53,6 +53,13 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
         return icons[weatherCode] || "/icon-sunny.webp"
     }
 
+    // NUEVA FUNCIÓN: Obtener nombre completo del día
+    const getFullDayName = (dateString) => {
+        const date = new Date(dateString)
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        return dayNames[date.getDay()]
+    }
+
     const getDayName = (dateString) => {
         const date = new Date(dateString)
         const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -68,6 +75,56 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
         if (hour === 12) return "12PM"
         return `${hour - 12}PM`
     }
+
+        // NUEVA FUNCIÓN: Filtrar horas por día
+    const getHoursByDay = (dayName) => {
+        if (!weatherData || !weatherData.hourly) return []
+
+        const hourly = weatherData.hourly
+
+        // Si no hay día seleccionado, mostramos las próximas 8 horas (comportamiento por defecto)
+        if (!dayName) {
+            return hourly.time.slice(0, 8).map((time, index) => ({
+                hour: formatHour(time),
+                weather: handleWeatherChange(Math.round(hourly.temperature_2m[index])),
+                icon: getWeatherIcon(hourly.weather_code[index])
+            }))
+        }
+
+        // Filtrar horas que corresponden al día seleccionado
+        const filteredHours = []
+        
+        for (let i = 0; i < hourly.time.length; i++) {
+            const timeString = hourly.time[i]
+            const fullDayName = getFullDayName(timeString)
+            
+            // Si el día coincide, agregamos la hora
+            if (fullDayName === dayName) {
+                filteredHours.push({
+                    hour: formatHour(timeString),
+                    weather: handleWeatherChange(Math.round(hourly.temperature_2m[i])),
+                    icon: getWeatherIcon(hourly.weather_code[i])
+                })
+            }
+            
+            // Limitamos a 24 horas (un día completo)
+            if (filteredHours.length >= 8) break
+        }
+
+        return filteredHours
+    }
+
+    // NUEVA FUNCIÓN: Manejar selección de día
+    const handleDayClick = (day) => {
+        // Si hace clic en el mismo día, lo deselecciona
+        if (dayClicked === day) {
+            setDay("")
+        } else {
+            setDay(day)
+        }
+        setIsOpen(false) // Cerramos el dropdown
+    }
+
 
     if (isLoading) {
         return (
@@ -97,12 +154,6 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
     const hourly = weatherData.hourly
     const location = weatherData.location
 
-    // Preparamos los datos horarios (próximas 8 horas)
-    const hourlyForecast = hourly.time.slice(0, 8).map((time, index) => ({
-        hour: formatHour(time),
-        weather: handleWeatherChange(Math.round(hourly.temperature_2m[index])),
-        icon: getWeatherIcon(hourly.weather_code[index])
-    }))
 
     // Preparamos los datos diarios (próximos 7 días)
     const dailyForescast = daily.time.slice(0, 7).map((date, index) => ({
@@ -111,6 +162,8 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
         min: handleWeatherChange(Math.round(daily.temperature_2m_min[index])),
         icon: getWeatherIcon(daily.weather_code[index])
     }))
+    // USAR LA NUEVA FUNCIÓN: Obtener horas según día seleccionado
+    const hourlyForecast = getHoursByDay(dayClicked)
 
     return (
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-white pb-12 px-4 flex-1">
@@ -137,7 +190,7 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
                             className="h-20 md:h-32 lg:h-48 object-contain"
                         />
                         <span className="text-4xl md:text-6xl lg:text-8xl">
-                            {Math.round(current.temperature_2m)}°
+                            {handleWeatherChange(current.temperature_2m)}°{temperatureUnit}
                         </span>
                     </div>
                 </div>
@@ -194,10 +247,10 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
                     <h1 className="sm:text-md lg:text-lg">Hourly Forecast</h1>
                     <button 
                         onClick={() => setIsOpen(!isOpen)} 
-                        className='bg-[#3C3B5E] ml-14 md:ml-35 p-2 rounded-md flex justify-between gap-3 items-center text-white'
+                        className='bg-[#3C3B5E] ml-14 md:ml-35 p-2 pr-4 rounded-md flex justify-between gap-1 items-center text-white'
                     >
                         <img src="./icon-units.svg" alt="" className='ml-2 w-4 h-4 bg-transparent'/>
-                        <span className='font-dm'>Days</span>
+                        <span className='font-dm'>{dayClicked ? dayClicked : 'Days'}</span>
                         <img 
                             src="./icon-dropdown.svg" 
                             alt="" 
@@ -209,7 +262,7 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
                             <div className="absolute top-full right-3 w-52 bg-[#262540] border border-gray-600 rounded-lg shadow-xl z-50 py-2 text-white font-sans flex flex-col text-left">
                                 {days.map((day, index) => (
                                     <button 
-                                        onClick={() => setDay(day)} 
+                                        onClick={() => handleDayClick(day)} 
                                         className={`mx-2 my-1 p-2 pt-3 pl-3 rounded-lg text-left ${dayClicked === day && 'bg-[#302F4A]'}`} 
                                         key={index}
                                     >
@@ -220,15 +273,23 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
                         </div>
                     )}
                 </div>
-                {hourlyForecast.map((hour, index) => (
-                    <div className="flex justify-between items-center p-2 bg-[#302F4A] border-[#3C3B5E] border-1 m-4 rounded-lg" key={index}>
-                        <div className="flex items-center">
-                            <img src={hour.icon} alt="" className="w-12 h-auto" />
-                            <span>{hour.hour}</span>
+                {/* Contenedor scrolleable para las horas */}
+                    {hourlyForecast.length > 0 ? (
+                        hourlyForecast.map((hour, index) => (
+                            <div className="flex justify-between items-center p-2 bg-[#302F4A] border-[#3C3B5E] border-1 m-4 rounded-lg" key={index}>
+                                <div className="flex items-center">
+                                    <img src={hour.icon} alt="" className="w-12 h-auto" />
+                                    <span>{hour.hour}</span>
+                                </div>
+                                <span>{hour.weather}°</span>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="flex items-center justify-center h-32 text-gray-400">
+                            No data available for this day
                         </div>
-                        <span>{hour.weather}°</span>
-                    </div>
-                ))}
+                    )}
+
             </div>
         </section>
     )
