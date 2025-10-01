@@ -1,10 +1,31 @@
 import { useState } from "react"
 
-function Weather ({weatherData, isLoading}) {
+function Weather ({weatherData, isLoading, temperatureUnit}) {
     const [isOpen, setIsOpen] = useState(false)
     const [dayClicked, setDay] = useState("")
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+    const handleWeatherChange = (weather) =>{
+        if(temperatureUnit === 'F'){
+            return Math.round((weather * 9/5) + 32)
+        }
+        return Math.round(weather)
+    }
+
+    const handleWind = (wind) =>{
+        if(temperatureUnit === 'F'){
+            return Math.round(wind * 0.62)
+        }
+        return Math.round(wind)
+    }
+
+    const handlePrecipitation = (precipitation) => {
+        if(temperatureUnit === 'F'){
+            return precipitation * 0.0393
+        }
+        return precipitation.toFixed(2)
+    }
 
     // FUNCIÓN: Obtener icono según el código del clima
     const getWeatherIcon = (weatherCode) => {
@@ -79,7 +100,7 @@ function Weather ({weatherData, isLoading}) {
     // Preparamos los datos horarios (próximas 8 horas)
     const hourlyForecast = hourly.time.slice(0, 8).map((time, index) => ({
         hour: formatHour(time),
-        weather: Math.round(hourly.temperature_2m[index]),
+        weather: handleWeatherChange(Math.round(hourly.temperature_2m[index])),
         icon: getWeatherIcon(hourly.weather_code[index])
     }))
 
@@ -87,8 +108,8 @@ function Weather ({weatherData, isLoading}) {
     // Preparamos los datos diarios (próximos 7 días)
     const dailyForescast = daily.time.slice(0, 7).map((date, index) => ({
         day: getDayName(date),
-        max: Math.round(daily.temperature_2m_max[index]),
-        min: Math.round(daily.temperature_2m_min[index]),
+        max: handleWeatherChange(Math.round(daily.temperature_2m_max[index])),
+        min: handleWeatherChange(Math.round(daily.temperature_2m_min[index])),
         icon: getWeatherIcon(daily.weather_code[index])
     }))
 
@@ -127,7 +148,7 @@ function Weather ({weatherData, isLoading}) {
                     <div className="aspect-square flex flex-col items-center justify-around bg-gray-800 rounded-lg p-4">
                         <span className="font-semibold lg:text-2xl">Feels Like</span>
                         <span className="text-2xl lg:text-4xl">
-                            {Math.round(current.apparent_temperature)}°
+                            {handleWeatherChange(Math.round(current.apparent_temperature))}°{temperatureUnit}
                         </span>
                     </div>
                     <div className="aspect-square flex flex-col items-center justify-around bg-gray-800 rounded-lg p-4">
@@ -139,13 +160,13 @@ function Weather ({weatherData, isLoading}) {
                     <div className="aspect-square flex flex-col items-center justify-around bg-gray-800 rounded-lg p-4">
                         <span className="font-semibold lg:text-2xl">Wind</span>
                         <span className="text-2xl lg:text-4xl">
-                            {Math.round(current.wind_speed_10m)} km/h
+                            {handleWind(Math.round(current.wind_speed_10m))}{temperatureUnit === 'C' ? 'Km/h' : 'Mph'}
                         </span>
                     </div>
                     <div className="aspect-square flex flex-col items-center justify-around bg-gray-800 rounded-lg p-4">
                         <span className="font-semibold lg:text-2xl">Precipitation</span>
                         <span className="text-2xl lg:text-4xl">
-                            {current.precipitation || 0}mm
+                            {handlePrecipitation(current.precipitation) || 0}{temperatureUnit === 'C' ? 'mm' : 'in'}
                         </span>
                     </div>
                 </div>

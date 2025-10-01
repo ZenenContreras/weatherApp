@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-function NavBar() {
-    const [Units, setUnits] = useState('metric')
+function NavBar({currentUnit, onUnitChange}) {
     const [isOpen, setisOpen] = useState(false)
     const [allow, setAllow] = useState(true)
 
@@ -26,15 +25,15 @@ function NavBar() {
                 {isOpen && (
                     <div >
                         <div className="absolute top-full right-0 mt-2 w-52 bg-[#262540] border border-gray-600 rounded-lg shadow-xl z-50 py-2 text-white font-sans flex flex-col items-center ">
-                            {Units === 'metric' ? (
+                            {currentUnit === 'C' ? (
                                 <div className=' m-1'>
-                                    <button className={`text-left p-2 rounded-lg w-44 ${!allow && 'animate-pulse bg-opacity-25 bg-blue-500'}`} onClick={() => setUnits('imperial')}>
+                                    <button onClick={()=> onUnitChange('F')} className={`text-left p-2 rounded-lg w-44 ${!allow && 'animate-pulse bg-opacity-25 bg-blue-500'}`} >
                                         Switch to Imperial
                                     </button>
                                 </div>
                             ): (
                                 <div className=' m-1'>
-                                    <button className={`text-left p-2 rounded-lg w-44 ${!allow && 'animate-pulse bg-blue-500'}`} onClick={() => setUnits('metric')}>
+                                    <button onClick={()=> onUnitChange('C')} className={`text-left p-2 rounded-lg w-44 ${!allow && 'animate-pulse bg-blue-500'}`}>
                                         Switch to Metric
                                     </button>
                                 </div>
@@ -42,15 +41,15 @@ function NavBar() {
                             <div className='flex flex-col items-start justify-start gap-2 '>
                                 <hr className='w-full'/>
                                 <span className='text-[#ACACB7] text-sm'>Temperature</span>
-                                <button onClick={Units === 'imperial' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'metric' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'F' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'C' ? 'bg-[#302F4A]' : ''}`} >
                                     Celsius (°C)
-                                    {Units === 'metric' && (
+                                    {currentUnit === 'C' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>
-                                <button onClick={Units === 'metric' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'imperial' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'C' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'F' ? 'bg-[#302F4A]' : ''}`} >
                                     Fahrenheit (°F)
-                                    {Units === 'imperial' && (
+                                    {currentUnit === 'F' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>
@@ -58,15 +57,15 @@ function NavBar() {
                                 <hr className='w-full'/>
                                 
                                 <span className='text-[#ACACB7] text-sm'>Wind Speed</span>
-                                <button onClick={Units === 'imperial' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'metric' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'F' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'C' ? 'bg-[#302F4A]' : ''}`} >
                                     km/h
-                                    {Units === 'metric' && (
+                                    {currentUnit === 'C' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>
-                                <button onClick={Units === 'metric' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'imperial' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'C' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'F' ? 'bg-[#302F4A]' : ''}`} >
                                     mph
-                                    {Units === 'imperial' && (
+                                    {currentUnit === 'F' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>
@@ -74,15 +73,15 @@ function NavBar() {
                                 <hr className='w-full'/>
 
                                 <span className='text-[#ACACB7] text-sm'>Precipitation</span>
-                                <button onClick={Units === 'imperial' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'metric' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'F' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'C' ? 'bg-[#302F4A]' : ''}`} >
                                     Millimeters (mm)
-                                    {Units === 'metric' && (
+                                    {currentUnit === 'C' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>
-                                <button onClick={Units === 'metric' && triggerBlink} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${Units === 'imperial' ? 'bg-[#302F4A]' : ''}`} >
+                                <button onClick={currentUnit === 'C' ? triggerBlink : undefined} className={`flex flex-row justify-between p-2 rounded-lg w-44 ${currentUnit === 'F' ? 'bg-[#302F4A]' : ''}`} >
                                     Inches (in)
-                                    {Units === 'imperial' && (
+                                    {currentUnit === 'F' && (
                                         <img src="./icon-checkmark.svg" alt="" />
                                     )}
                                 </button>

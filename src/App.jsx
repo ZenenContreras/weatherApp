@@ -6,6 +6,8 @@ import { useState } from 'react'
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [weatherData, setWeatherData] = useState(null)
+  const [temperatureUnit, setTemperatureUnit] = useState('C') // 'C' o 'F'
+  console.log(temperatureUnit)
 
   const handleCitySelect = async (city) =>{
     console.log("Ciudad seleccionada: ", city)
@@ -36,11 +38,15 @@ function App() {
 
   }
 
+  const handleUnitChange = (unit) => {
+    setTemperatureUnit(unit) // 'C' o 'F'
+  }
+
   return (
     <div className='h-full bg-[#02012C] md:px-[70px] lg:px-[240px] '>
-      <NavBar/>
+      <NavBar currentUnit={temperatureUnit} onUnitChange={handleUnitChange}/>
       <SearchBar onCitySelect={handleCitySelect} />
-      <Weather weatherData={weatherData} isLoading={isLoading} />
+      <Weather  temperatureUnit={temperatureUnit} weatherData={weatherData} isLoading={isLoading} />
     </div>
     
   )

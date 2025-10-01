@@ -51,12 +51,12 @@ function SearchBar ({ onCitySelect }){
 
 
     return (
-        <div className=" min-w-22 font-dm pt-20 flex flex-col items-center mx-4">
+        <div className=" m font-dm pt-20 flex flex-col items-center mx-4">
             <h1 className="font-bold text-white text-5xl text-center">How’s the sky looking today?</h1>
             <div className="relative">
-                <div className=" text-white py-10 w-full flex flex-col lg:flex-row items-center justify-center gap-4">
+                <div className=" text-white  py-10  flex flex-col lg:flex-row items-center justify-center gap-4">
                         <input
-                            className="h-12 bg-[#262540] w-full lg:w-140 rounded-xl pl-12 pr-5 placeholder-white"
+                            className="h-12 bg-[#262540] w-[350px] lg:w-140 rounded-xl pl-12 pr-5 placeholder-white"
                             type="text"
                             placeholder="Search for a place..."
                             onChange={handleInputChange}
@@ -67,7 +67,7 @@ function SearchBar ({ onCitySelect }){
                         </button>  
                 </div>
             {isOpen && (
-                <div className="absolute top-full lg:top-[75%] right-0 w-full bg-[#262540] border border-gray-600 rounded-lg shadow-xl z-50 p-2 text-white font-sans flex flex-col items-center ">
+                <div className="absolute top-[85%] lg:top-[75%] right-0 w-full bg-[#262540] border border-gray-600 rounded-lg shadow-xl z-50 p-2 text-white font-sans flex flex-col items-center ">
                         {isLoading ? (
                             <div class="animate-spin inline-block size-6 border-4 border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
                             </div>
