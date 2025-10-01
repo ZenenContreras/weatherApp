@@ -22,7 +22,7 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
 
     const handlePrecipitation = (precipitation) => {
         if(temperatureUnit === 'F'){
-            return precipitation * 0.0393
+            return (precipitation * 0.0393).toFixed(2)
         }
         return precipitation.toFixed(2)
     }
@@ -103,7 +103,6 @@ function Weather ({weatherData, isLoading, temperatureUnit}) {
         weather: handleWeatherChange(Math.round(hourly.temperature_2m[index])),
         icon: getWeatherIcon(hourly.weather_code[index])
     }))
-
 
     // Preparamos los datos diarios (próximos 7 días)
     const dailyForescast = daily.time.slice(0, 7).map((date, index) => ({
