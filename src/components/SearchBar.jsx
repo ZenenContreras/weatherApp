@@ -55,8 +55,9 @@ function SearchBar ({ onCitySelect }){
             <h1 className="font-bold text-white text-5xl text-center">How’s the sky looking today?</h1>
             <div className="relative">
                 <div className=" text-white  py-10  flex flex-col lg:flex-row items-center justify-center gap-4">
+                        <img src="/icon-search.svg" className="absolute z-50 left-4  "/>
                         <input
-                            className="h-12 bg-[#262540] w-[350px] lg:w-140 rounded-xl pl-12 pr-5 placeholder-white"
+                            className=" relative h-12 bg-[#262540] w-[350px] lg:w-140 rounded-xl pl-12 pr-5 placeholder-white"
                             type="text"
                             placeholder="Search for a place..."
                             onChange={handleInputChange}
