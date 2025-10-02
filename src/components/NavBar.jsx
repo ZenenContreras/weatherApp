@@ -12,7 +12,7 @@ function NavBar({currentUnit, onUnitChange}) {
     };
 
     return (
-        <nav className='sticky top-0 flex p-5  justify-between items-center font-dm'>
+        <nav className='sticky z-100 top-0 bg-[#02012C] flex p-5  justify-between items-center font-dm'>
             <img src="./logo.svg" alt="" className='w-[130px] md:w-[140px] lg:w-[150px]' />
 
             <div className='relative'>
